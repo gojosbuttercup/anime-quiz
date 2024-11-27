@@ -81,23 +81,34 @@ function loadQuestion() {
     options.forEach((option, index) => {
         option.innerText = questions[currentQuestionIndex].options[index];
     });
+    document.getElementById("next-btn").style.display = "none"; // Hide Next button initially
 }
 
 function selectOption(optionIndex) {
     const correctIndex = questions[currentQuestionIndex].answer;
-    if (optionIndex === correctIndex) score++;
-    document.getElementById("score").innerText = `Score: ${score}`;
+    if (optionIndex === correctIndex) {
+        score++;
+        document.getElementById("score").innerText = `Score: ${score}`;
+    }
+    const options = document.querySelectorAll(".option");
+    options.forEach(option => {
+        option.disabled = true; // Disable all options after selection
+    });
+    document.getElementById("next-btn").style.display = "block"; // Show the Next button
 }
 
 function nextQuestion() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
         loadQuestion();
+        const options = document.querySelectorAll(".option");
+        options.forEach(option => {
+            option.disabled = false; // Enable all options for the next question
+        });
     } else {
         document.getElementById("question").innerText = "Quiz Completed!";
-        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("next-btn").style.display = "none"; // Hide the Next button
     }
 }
 
 loadQuestion();
-
